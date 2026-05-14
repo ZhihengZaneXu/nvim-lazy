@@ -42,17 +42,64 @@ Then run `:Mason` to install language servers, and `:checkhealth` to confirm eve
 └── lazy-lock.json            -- pinned plugin versions
 ```
 
-## Plugins
 
-**UI**: rose-pine, tokyonight, lualine, noice, barbar, nvim-tree, aerial, nvim-web-devicons
-**Editing**: nvim-autopairs, Comment.nvim, gitsigns, vim-tmux-navigator
-**Search/nav**: telescope, plenary, trouble
-**Completion**: nvim-cmp with `nvim_lsp`, `luasnip`, `buffer`, `path`, `cmdline` sources
-**Treesitter**: lua, python, javascript, html, css (auto-install on)
-**LSP**: nvim-lspconfig + mason; servers configured for `lua_ls`, `pylsp`, `texlab`, `harper_ls`; plus lspsaga and nvim-navic
-**Lint/format**: conform.nvim (stylua, black, prettier, latexindent), nvim-lint (flake8, eslint_d)
-**Debug**: nvim-dap (Python via debugpy)
-**Filetype**: vimtex (Tectonic + Zathura), nvim-jupyter-client, csvview, love2d
+### UI
+
+| Plugin | Purpose |
+| --- | --- |
+| [rose-pine](https://github.com/rose-pine/neovim) | Default colorscheme (moon variant) |
+| [tokyonight](https://github.com/folke/tokyonight.nvim) | Backup colorscheme |
+| [lualine](https://github.com/nvim-lualine/lualine.nvim) | Status line |
+| [noice](https://github.com/folke/noice.nvim) | Cleaner cmdline / messages / popups |
+| [barbar](https://github.com/romgrk/barbar.nvim) | Buffer line / tabs |
+| [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua) | File explorer sidebar |
+| [aerial](https://github.com/stevearc/aerial.nvim) | Symbol outline |
+| [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) | File-type icons |
+
+### Editing
+
+| Plugin | Purpose |
+| --- | --- |
+| [nvim-autopairs](https://github.com/windwp/nvim-autopairs) | Auto-close brackets/quotes |
+| [Comment.nvim](https://github.com/numToStr/Comment.nvim) | `gcc` / `gc` comment toggling |
+| [gitsigns](https://github.com/lewis6991/gitsigns.nvim) | Inline git diff markers, blame, hunk staging |
+| [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | `<C-h/j/k/l>` across nvim + tmux panes |
+
+### Search & navigation
+
+| Plugin | Purpose |
+| --- | --- |
+| [telescope](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder (files, grep, buffers, help) |
+| [plenary](https://github.com/nvim-lua/plenary.nvim) | Lua utility library (telescope dependency) |
+| [trouble](https://github.com/folke/trouble.nvim) | Pretty diagnostics / LSP refs panel |
+
+### Completion
+
+| Plugin | Purpose |
+| --- | --- |
+| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Completion engine |
+| Sources | `nvim_lsp`, `luasnip`, `buffer`, `path`, `cmdline` |
+
+### Language support
+
+| Plugin | Purpose |
+| --- | --- |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax/indent for lua, python, javascript, html, css (auto-install on) |
+| [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) + [mason](https://github.com/williamboman/mason.nvim) | LSP setup; servers: `lua_ls`, `pylsp`, `texlab`, `harper_ls` |
+| [lspsaga](https://github.com/nvimdev/lspsaga.nvim) | LSP UI (code actions, hover, rename) |
+| [nvim-navic](https://github.com/SmiteshP/nvim-navic) | Breadcrumb context from LSP |
+| [conform.nvim](https://github.com/stevearc/conform.nvim) | Formatters: stylua, black, prettier, latexindent |
+| [nvim-lint](https://github.com/mfussenegger/nvim-lint) | Linters: flake8, eslint_d |
+| [nvim-dap](https://github.com/mfussenegger/nvim-dap) | Debug adapter (Python via debugpy) |
+
+### Filetype-specific
+
+| Plugin | Purpose |
+| --- | --- |
+| [vimtex](https://github.com/lervag/vimtex) | LaTeX editing, Tectonic compile, Zathura preview |
+| [nvim-jupyter-client](https://github.com/geg2102/nvim-jupyter-client) | Jupyter cell operations on `.ipynb` |
+| [csvview](https://github.com/hat0uma/csvview.nvim) | Column-aligned CSV viewing |
+| [love2d.nvim](https://github.com/S1M0N38/love2d.nvim) | LÖVE game framework helpers |
 
 ## Keymaps
 
