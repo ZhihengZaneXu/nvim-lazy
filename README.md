@@ -42,6 +42,7 @@ Then run `:Mason` to install language servers, and `:checkhealth` to confirm eve
 └── lazy-lock.json            -- pinned plugin versions
 ```
 
+## Plugin
 
 ### UI
 
