@@ -1,156 +1,139 @@
-This is updated neovim configuration, which use lazy-nvim as plugin manager.
+# nvim-lazy
 
-## Requirement
-### telescope extension
+My Neovim configuration, organized around [lazy.nvim](https://github.com/folke/lazy.nvim). Built around an academic workflow: Python, LaTeX, and Jupyter, with Lua for editor work on the side.
 
-using ':lua print(vim.fn.executable("rg"))' to check whether rg is installed if not please install ripgrep through apt, besides you should install camke in advance
-## Full List of plugins
-To Do
-## LSP Configure
-To do
-## KeyMaps
-### Trouble.nvim
+## Requirements
 
-```lua
-{
-  "folke/trouble.nvim",
-  opts = {}, -- for default options, refer to the configuration section for custom setup.
-  cmd = "Trouble",
-  keys = {
-    {
-      "<leader>xx",
-      "<cmd>Trouble diagnostics toggle<cr>",
-      desc = "Diagnostics (Trouble)",
-    },
-    {
-      "<leader>xX",
-      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-      desc = "Buffer Diagnostics (Trouble)",
-    },
-    {
-      "<leader>cs",
-      "<cmd>Trouble symbols toggle focus=false<cr>",
-      desc = "Symbols (Trouble)",
-    },
-    {
-      "<leader>cl",
-      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-      desc = "LSP Definitions / references / ... (Trouble)",
-    },
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Location List (Trouble)",
-    },
-    {
-      "<leader>xQ",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Quickfix List (Trouble)",
-    },
-  },
-}
+- Neovim ≥ 0.11 (uses the new `vim.lsp.config` API)
+- `git`, `make`, `cmake`, a C compiler (for treesitter and telescope-fzf-native)
+- [`ripgrep`](https://github.com/BurntSushi/ripgrep) (telescope live-grep)
+- A [Nerd Font](https://www.nerdfonts.com/) for icons
+- [`tectonic`](https://tectonic-typesetting.github.io/) and [`zathura`](https://pwmt.org/projects/zathura/) for the LaTeX workflow
+- A Python with `debugpy` available if you use `nvim-dap`
+
+Verify ripgrep is on your PATH:
+
+```vim
+:lua print(vim.fn.executable("rg"))
 ```
 
-### gitsigns
-```lua
-          map('n', '<leader>hs', gs.stage_hunk)
-          map('n', '<leader>hr', gs.reset_hunk)
-          map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line("."), vim.fn.line("v")} end)
-          map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line("."), vim.fn.line("v")} end)
-          map('n', '<leader>hS', gs.stage_buffer)
-          map('n', '<leader>hu', gs.undo_stage_hunk)
-          map('n', '<leader>hR', gs.reset_buffer)
-          map('n', '<leader>hp', gs.preview_hunk)
-          map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-          map('n', '<leader>tb', gs.toggle_current_line_blame)
-          map('n', '<leader>hd', gs.diffthis)
-          map('n', '<leader>hD', function() gs.diffthis('~') end)
-          map('n', '<leader>td', gs.toggle_deleted)
+## Install
 
-          -- Text object
-          map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+```bash
+git clone https://github.com/<you>/nvim-lazy ~/.config/nvim
+nvim   # lazy.nvim bootstraps itself and installs plugins on first launch
 ```
+
+Then run `:Mason` to install language servers, and `:checkhealth` to confirm everything is wired up.
+
+## Layout
+
+```
+├── init.lua                  -- entry point
+├── lua/
+│   ├── config/
+│   │   ├── lazy.lua          -- bootstrap + plugin imports
+│   │   ├── options.lua       -- vim.opt settings
+│   │   ├── keymaps.lua       -- global keymaps
+│   │   └── colorscheme.lua   -- colorscheme selection
+│   └── plugins/
+│       ├── colorschemes/     -- rose-pine (default), tokyonight
+│       └── lsp/              -- LSP, DAP, lint, format, mason
+└── lazy-lock.json            -- pinned plugin versions
+```
+
+## Plugins
+
+**UI**: rose-pine, tokyonight, lualine, noice, barbar, nvim-tree, aerial, nvim-web-devicons
+**Editing**: nvim-autopairs, Comment.nvim, gitsigns, vim-tmux-navigator
+**Search/nav**: telescope, plenary, trouble
+**Completion**: nvim-cmp with `nvim_lsp`, `luasnip`, `buffer`, `path`, `cmdline` sources
+**Treesitter**: lua, python, javascript, html, css (auto-install on)
+**LSP**: nvim-lspconfig + mason; servers configured for `lua_ls`, `pylsp`, `texlab`, `harper_ls`; plus lspsaga and nvim-navic
+**Lint/format**: conform.nvim (stylua, black, prettier, latexindent), nvim-lint (flake8, eslint_d)
+**Debug**: nvim-dap (Python via debugpy)
+**Filetype**: vimtex (Tectonic + Zathura), nvim-jupyter-client, csvview, love2d
+
+## Keymaps
+
+Leader is `<space>`, local leader is `\`.
+
+### General
+
+| Keys           | Action                  |
+| -------------- | ----------------------- |
+| `<leader>nh`   | Clear search highlight  |
+| `<leader>x`    | Close current split     |
+| `<leader>to/tx/tn/tp` | New / close / next / prev tab |
+| `<C-h/j/k/l>`  | Tmux-aware window nav   |
+| `<leader>t`    | Toggle nvim-tree        |
 
 ### Telescope
 
-```lua
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+| Keys           | Action          |
+| -------------- | --------------- |
+| `<leader>ff`   | Find files      |
+| `<leader>fg`   | Live grep       |
+| `<leader>fb`   | List buffers    |
+| `<leader>fh`   | Help tags       |
+
+### Buffers (barbar)
+
+| Keys           | Action               |
+| -------------- | -------------------- |
+| `<A-,>` / `<A-.>` | Previous / next   |
+| `<A-1>`…`<A-9>`, `<A-0>` | Goto buffer N / last |
+| `<A-c>`        | Close buffer         |
+| `<C-p>`        | Pick mode            |
+
+### Git (gitsigns)
+
+| Keys           | Action                    |
+| -------------- | ------------------------- |
+| `]c` / `[c`    | Next / prev hunk          |
+| `<leader>hs/hr` | Stage / reset hunk       |
+| `<leader>hp`   | Preview hunk              |
+| `<leader>hb`   | Blame line (full)         |
+| `<leader>hd`   | Diff this buffer          |
+
+### Diagnostics (trouble)
+
+| Keys           | Action                      |
+| -------------- | --------------------------- |
+| `<leader>xx`   | Diagnostics (workspace)     |
+| `<leader>xX`   | Diagnostics (buffer)        |
+| `<leader>cs`   | Symbols panel               |
+| `<leader>cl`   | LSP defs / refs             |
+
+### Symbols (aerial)
+
+| Keys           | Action                  |
+| -------------- | ----------------------- |
+| `<leader>ao`   | Toggle outline (right)  |
+| `<leader>an/ap`| Next / prev symbol      |
+
+### Jupyter
+
+| Keys                | Action                        |
+| ------------------- | ----------------------------- |
+| `<leader>ja/jA`     | Add cell below / above        |
+| `<leader>jd/jD`     | Remove / delete cell          |
+| `<leader>jm/jM`     | Merge with cell above / below |
+| `<leader>jt`        | Convert cell type             |
+
+### Format
+
+`<leader>f` runs conform on the current buffer (also on save).
+
+## Colorschemes
+
+Default is **rose-pine** (moon variant). Switch on the fly:
+
+```vim
+:RosePineMoon
+:RosePineDawn
 ```
 
-### Nvim-cmp
-```lua
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept selected item
-          ["<C-j>"] = cmp.mapping(function(fallback) --Scroll Down
-          ["<C-k>"] --Scroll up
-```
-### General KeyMaps
-```lua
-keymap.set("n", "<leader>nh", ":nohl<CR>")
-keymap.set("n", "<leader>x", ":close<CR>") -- close current split window
+## License
 
--- tab map
-keymap.set("n", "<leader>to", ":tabnew<CR>") --open new tab
-keymap.set("n", "<leader>tx", ":tabclose<CR>") --close current tab
-keymap.set("n", "<leader>tn", ":+tabnext<CR>") --close current tab
-keymap.set("n", "<leader>tp", ":-tabnext<CR>") --close current tab
--- tmux navigation
-keymap.set("n","<C-h>", "<cmd> TmuxNavigateLeft<CR>")
-keymap.set("n","<C-l>", "<cmd> TmuxNavigateRight<CR>")
-keymap.set("n","<C-j>", "<cmd> TmuxNavigateDown<CR>")
-keymap.set("n","<C-k>", "<cmd> TmuxNavigateUp<CR>")
--- nvim-tree
-keymap.set("n","<leader>t",":NvimTreeOpen<CR>", {noremap = true, silent =true})
--- barbar
--- Move to previous/next
-keymap.set("n", "<A-,>", "<Cmd>BufferPrevious<CR>", opts)
-keymap.set("n", "<A-.>", "<Cmd>BufferNext<CR>", opts)
--- Re-order to previous/next
-keymap.set("n", "<A-<>", "<Cmd>BufferMovePrevious<CR>", opts)
-keymap.set("n", "<A->>", "<Cmd>BufferMoveNext<CR>", opts)
--- Goto buffer in position...
-keymap.set("n", "<A-1>", "<Cmd>BufferGoto 1<CR>", opts)
-keymap.set("n", "<A-2>", "<Cmd>BufferGoto 2<CR>", opts)
-keymap.set("n", "<A-3>", "<Cmd>BufferGoto 3<CR>", opts)
-keymap.set("n", "<A-4>", "<Cmd>BufferGoto 4<CR>", opts)
-keymap.set("n", "<A-5>", "<Cmd>BufferGoto 5<CR>", opts)
-keymap.set("n", "<A-6>", "<Cmd>BufferGoto 6<CR>", opts)
-keymap.set("n", "<A-7>", "<Cmd>BufferGoto 7<CR>", opts)
-keymap.set("n", "<A-8>", "<Cmd>BufferGoto 8<CR>", opts)
-keymap.set("n", "<A-9>", "<Cmd>BufferGoto 9<CR>", opts)
-keymap.set("n", "<A-0>", "<Cmd>BufferLast<CR>", opts)
--- Pin/unpin buffer
-keymap.set("n", "<A-p>", "<Cmd>BufferPin<CR>", opts)
--- Close buffer
-keymap.set("n", "<A-c>", "<Cmd>BufferClose<CR>", opts)
--- Magic buffer-picking mode
-keymap.set("n", "<C-p>", "<Cmd>BufferPick<CR>", opts)
--- Sort automatically by...
-keymap.set("n", "<Space>bb", "<Cmd>BufferOrderByBufferNumber<CR>", opts)
-keymap.set("n", "<Space>bd", "<Cmd>BufferOrderByDirectory<CR>", opts)
-keymap.set("n", "<Space>bl", "<Cmd>BufferOrderByLanguage<CR>", opts)
-keymap.set("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", opts)
--- Jupter setup
--- Add cells
-vim.keymap.set("n", "<leader>ja", "<cmd>JupyterAddCellBelow<CR>", { desc = "Add Jupyter cell below" })
-vim.keymap.set("n", "<leader>jA", "<cmd>JupyterAddCellAbove<CR>", { desc = "Add Jupyter cell above" })
-
--- Cell operations
-vim.keymap.set("n", "<leader>jd", "<cmd>JupyterRemoveCell<CR>", { desc = "Remove current Jupyter cell" })
-vim.keymap.set("n", "<leader>jm", "<cmd>JupyterMergeCellAbove<CR>", { desc = "Merge with cell above" })
-vim.keymap.set("n", "<leader>jM", "<cmd>JupyterMergeCellBelow<CR>", { desc = "Merge with cell below" })
-vim.keymap.set("n", "<leader>jt", "<cmd>JupyterConvertCellType<CR>", 
-    { desc = "Convert cell type (code/markdown)" })
-vim.keymap.set("v", "<leader>jm", "<cmd>JupyterMergeVisual<CR>", 
-    { desc = "Merge selected cells" })
-vim.keymap.set("n", "<leader>jD", "<cmd>JupyterDeleteCell<CR>",
-    { desc = "Delete cell under cursor and store in register" })
-```
-
+MIT.
