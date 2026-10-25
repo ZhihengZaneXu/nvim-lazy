@@ -20,7 +20,7 @@ Verify ripgrep is on your PATH:
 ## Install
 
 ```bash
-git clone https://github.com/<you>/nvim-lazy ~/.config/nvim
+git clone https://github.com/ZhihengZaneXu/nvim-lazy ~/.config/nvim
 nvim   # lazy.nvim bootstraps itself and installs plugins on first launch
 ```
 
