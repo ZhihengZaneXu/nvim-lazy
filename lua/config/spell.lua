@@ -10,3 +10,16 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spelllang = "en_us"
   end,
 })
+
+local function spell_highlights()
+  vim.api.nvim_set_hl(0, "SpellBad", {
+    undercurl = true,
+    sp = "#454545",
+  })
+end
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = spell_highlights,
+})
+
+spell_highlights()
