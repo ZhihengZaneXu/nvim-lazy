@@ -8,9 +8,13 @@ vim.opt.termguicolors = true
 -- Set memeory capacity
 vim.o.maxmempattern = 200000
 
+-- Set cliipboard sharing
+vim.opt.clipboard = "unnamedplus"
+
 -- Install lazy.nvim
 require("config.lazy")
 
 require("config.keymaps")
 require("config.options")
 require("config.colorscheme")
+require("config.spell")

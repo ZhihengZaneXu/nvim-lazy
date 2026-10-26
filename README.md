@@ -128,6 +128,32 @@ Manage packages:
 - `:MasonUninstall <pkg>` — remove a package
 - `:MasonUpdate` — refresh the registry
 
+## Spell checking
+
+Spell checking is enabled automatically for text, Markdown, LaTeX,
+and Typst files.
+
+- `]s` / `[s`: Move to the next / previous misspelled word.
+- `z=`: Show spelling suggestions.
+- `zg`: Add the word under the cursor to your personal dictionary.
+- `zug`: Remove the word from your personal dictionary.
+- `:setlocal spell!`: Toggle spell checking.
+
+Personal dictionary files are stored in `spell/` within the Neovim
+configuration directory. This directory is created automatically and
+ignored by Git, so each user maintains their own dictionary.
+
+
+## System clipboard in Neovim
+ 
+Neovim yanks, deletes and pastes share the system clipboard.
+ 
+**Setup**
+ 
+1. Install the Wayland clipboard tool:
+```bash
+   sudo apt install wl-clipboard
+```
 
 ## Keymaps
 
