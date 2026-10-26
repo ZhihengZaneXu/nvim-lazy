@@ -7,7 +7,8 @@ return {
 		vim.g.vimtex_compiler_tectonic = {
 			executable = "tectonic",
 			options = {
-				"%f", -- just compile, no aux/log
+              "--keep-logs",
+              "--synctex",
 			},
 		}
 
@@ -15,5 +16,11 @@ return {
 		vim.g.vimtex_view_method = "zathura"
 		vim.g.vimtex_view_general_viewer = "zathura"
 		vim.g.vimtex_view_general_options = "--synctex-forward @line:@col:@tex @pdf"
+
+      -- Tectonic has no continuous mode, so recompile the PDF on every save
+      vim.api.nvim_create_autocmd("BufWritePost", {
+          pattern = "*.tex", 
+          command = "VimtexCompile",
+      })
 	end,
 }
