@@ -6,6 +6,7 @@ My Neovim configuration, organized around [lazy.nvim](https://github.com/folke/l
 
 - Neovim ≥ 0.11 (uses the new `vim.lsp.config` API)
 - `git`, `make`, `cmake`, a C compiler (for treesitter and telescope-fzf-native)
+- [`tree-sitter` CLI](https://github.com/tree-sitter/tree-sitter) ≥ 0.25 — required by nvim-treesitter's `main` branch to compile parsers
 - [`ripgrep`](https://github.com/BurntSushi/ripgrep) (telescope live-grep)
 - A [Nerd Font](https://www.nerdfonts.com/) for icons
 - [`tectonic`](https://tectonic-typesetting.github.io/) and [`zathura`](https://pwmt.org/projects/zathura/) for the LaTeX workflow
@@ -25,6 +26,8 @@ nvim   # lazy.nvim bootstraps itself and installs plugins on first launch
 ```
 
 Then run `:Mason` to install language servers, and `:checkhealth` to confirm everything is wired up.
+
+
 
 ## Layout
 
@@ -85,7 +88,7 @@ Then run `:Mason` to install language servers, and `:checkhealth` to confirm eve
 
 | Plugin | Purpose |
 | --- | --- |
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax/indent for lua, python, javascript, html, css (auto-install on) |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) (`main` branch) | Highlighting/indent for lua, python, javascript, html, css, markdown, bash, json; other parsers auto-install on first use (needs `tree-sitter` CLI) |
 | [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) + [mason](https://github.com/williamboman/mason.nvim) | LSP setup; servers: `lua_ls`, `pylsp`, `texlab`, `harper_ls` |
 | [lspsaga](https://github.com/nvimdev/lspsaga.nvim) | LSP UI (code actions, hover, rename) |
 | [nvim-navic](https://github.com/SmiteshP/nvim-navic) | Breadcrumb context from LSP |
@@ -100,7 +103,31 @@ Then run `:Mason` to install language servers, and `:checkhealth` to confirm eve
 | [vimtex](https://github.com/lervag/vimtex) | LaTeX editing, Tectonic compile, Zathura preview |
 | [nvim-jupyter-client](https://github.com/geg2102/nvim-jupyter-client) | Jupyter cell operations on `.ipynb` |
 | [csvview](https://github.com/hat0uma/csvview.nvim) | Column-aligned CSV viewing |
-| [love2d.nvim](https://github.com/S1M0N38/love2d.nvim) | LÖVE game framework helpers |
+
+## Mason
+
+[Mason](https://github.com/williamboman/mason.nvim) installs the language servers, formatters, linters, and debuggers this config expects. After the first launch, run:
+
+```vim
+:MasonInstall texlab python-lsp-server harper-ls stylua black prettier latexindent flake8 eslint_d debugpy
+```
+
+| Package | Used by | Purpose |
+| --- | --- | --- |
+| `lua-language-server` | lspconfig | Lua LSP (auto-installed) |
+| `python-lsp-server` | lspconfig | Python LSP (`pylsp`) |
+| `texlab` | lspconfig | LaTeX LSP — also feeds aerial's outline |
+| `harper-ls` | lspconfig | Grammar checking |
+| `stylua`, `black`, `prettier`, `latexindent` | conform | Formatters |
+| `flake8`, `eslint_d` | nvim-lint | Linters |
+| `debugpy` | nvim-dap | Python debugger |
+
+Manage packages:
+
+- `:Mason` — open the UI (`i` install, `X` uninstall, `U` update all, `g?` help)
+- `:MasonUninstall <pkg>` — remove a package
+- `:MasonUpdate` — refresh the registry
+
 
 ## Keymaps
 
