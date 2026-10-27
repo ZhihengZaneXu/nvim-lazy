@@ -13,8 +13,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 local function spell_highlights()
   vim.api.nvim_set_hl(0, "SpellBad", {
-    undercurl = true,
-    sp = "#454545",
+    underline = true,
+    sp = "#666666",
+    cterm = { underline = true },
   })
 end
 
