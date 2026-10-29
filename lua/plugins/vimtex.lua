@@ -7,20 +7,27 @@ return {
 		vim.g.vimtex_compiler_tectonic = {
 			executable = "tectonic",
 			options = {
-              "--keep-logs",
-              "--synctex",
+				"--keep-logs", -- keep the .log so VimTeX can parse errors/warnings
+				"--synctex",
 			},
 		}
 
-		-- Zathura for preview
+		-- Zathura for preview (forward/inverse search handled by VimTeX)
 		vim.g.vimtex_view_method = "zathura"
-		vim.g.vimtex_view_general_viewer = "zathura"
-		vim.g.vimtex_view_general_options = "--synctex-forward @line:@col:@tex @pdf"
 
-      -- Tectonic has no continuous mode, so recompile the PDF on every save
-      vim.api.nvim_create_autocmd("BufWritePost", {
-          pattern = "*.tex", 
-          command = "VimtexCompile",
-      })
+		-- Quickfix: only pop up on real errors, and never steal focus
+		vim.g.vimtex_quickfix_open_on_warning = 0
+		vim.g.vimtex_quickfix_mode = 2
+
+		-- Tectonic has no continuous mode, so recompile the PDF on every save
+		vim.api.nvim_create_autocmd("BufWritePost", {
+			group = vim.api.nvim_create_augroup("VimtexCompileOnSave", { clear = true }),
+			pattern = "*.tex",
+			callback = function()
+				if vim.fn.exists(":VimtexCompile") == 2 then
+					vim.cmd("VimtexCompile")
+				end
+			end,
+		})
 	end,
 }
